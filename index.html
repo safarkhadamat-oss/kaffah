@@ -84,47 +84,69 @@
         // ================= MASTER TUGAS PEGAWAI =================
         const masterTugas = {
             "Ridhwanullah": [
-                { id: "r1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "r1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
                 { id: "r2", teks: "Follow up calon jamaah potensial via telepon", tipe: "skor", label: "Jumlah jamaah yang di-follow up?" }
             ],
             "Wahyono": [
-                { id: "w1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "w1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
                 { id: "w2", teks: "Mengadakan morning briefing pegawai", tipe: "centang", label: "Apakah dilaksanakan?" },
                 { id: "w3", teks: "Mencatat data kehadiran pegawai (Morning Briefing)", tipe: "absensi_briefing" },
                 { id: "w4", teks: "Mencatat status kehadiran kerja pegawai harian", tipe: "absensi_kehadiran" },
                 { id: "w5", teks: "Mencatat ketertiban berpakaian pegawai", tipe: "absensi_berpakaian" }
             ],
             "Fardhol Suparlan": [
-                { id: "f1", teks: "Melakukan telemarketing paket umrah dan haji ke 3 orang setiap hari", tipe: "skor", label: "Berapa orang yang ditelpon hari ini?" },
-                { id: "f2", teks: "Menawarkan Paket Umrah dan Haji ke 3 orang tokoh setiap pekan", tipe: "skor", label: "Jumlah tokoh yang ditawarkan hari ini?" },
-                { id: "f3", teks: "Menawarkan paket umrah dan haji ke 50 database setiap pekan", tipe: "skor", label: "Jumlah database yang dihubungi hari ini?" }
+                { id: "f1", teks: "Melakukan telemarketing paket umrah dan haji ke 3 orang baru setiap hari", tipe: "skor", label: "Berapa orang yang ditelpon hari ini?" },
+                { id: "f2", teks: "Melakukan remarketing paket umrah dan haji ke 3 orang lama setiap hari", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "f3", teks: "Menawarkan Paket Umrah dan Haji ke 3 orang tokoh setiap pekan", tipe: "skor", label: "Jumlah tokoh yang ditawarkan hari ini?" },
+                { id: "f4", teks: "Menawarkan paket umrah dan haji ke 50 database setiap pekan", tipe: "skor", label: "Jumlah database yang dihubungi hari ini?" }
             ],
             "Rizkiyah Husnul Khotimah": [
-                { id: "rk1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "rk1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
                 { id: "rk2", teks: "Menginput data jamaah yang ingin mendaftar umrah atau haji", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah data yang diinput?" },
                 { id: "rk3", teks: "Mendokumentasi data hardcopy jamaah yang telah mendaftar umrah atau haji secara digital yang masuk hari ini", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah data yang didokumentasi secara digital?" },
                 { id: "rk4", teks: "Membuat dan menyimpan data cetak dan data digital MOU dan PKS", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah MOU dan PKS yang didokumentasi?" },
                 { id: "rk5", teks: "Berkomunikasi dengan vendor-vendor", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa vendor hari ini?" },
                 { id: "rk6", teks: "Berkomunikasi dengan pihak yang bekerjasama bisnis", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa pihak hari ini?" },
-                { id: "rk7", teks: "Mengadakan WIG Sesi", tipe: "centanG", label: "Apakah dijalankan?" },
-                { id: "rk8", teks: "Mengevaluasi Scoring Board Pegawai", tipe: "centanG", label: "Apakah dijalankan?" },
-                { id: "rk3", teks: "Mengadakan meeting rutin komisaris bersama direksi dan mencatat kehadirannya", tipe: "absensi_meeting_komisaris" }
+                { id: "rk7", teks: "Mengadakan WIG Sesi", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "rk8", teks: "Mengevaluasi Scoring Board Pegawai", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "rk9", teks: "Mengadakan meeting rutin komisaris bersama direksi dan mencatat kehadirannya", tipe: "absensi_meeting_komisaris" }
             ],
             "Miftahul Sakinah": [
-                { id: "s1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
-                { id: "s2", teks: "Mencatat transaksi yang terjadi hari ini", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah transaksi dicatat?" }
+                { id: "s1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "s2", teks: "Melakukan transaksi yang diperlukan hari ini", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah transaksi dilakukan?" },
+                { id: "s3", teks: "Mencatat transaksi yang terjadi hari ini", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah transaksi dicatat?" },
+                { id: "s4", teks: "Memberikan laporan rutin pekanan", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "s5", teks: "Memberikan laporan rutin bulanan", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "s6", teks: "Memberikan laporan rutin tahunan", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "s7", teks: "Berkomunikasi dengan konsultan pajak dan keuangan", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "s8", teks: "Membuat dan mengajukan anggaran bulanan operasional sebelum tanggal 22", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "s9", teks: "Membuat slip gaji dan mengajukan anggaran bulanan gaji karyawan sebelum tanggal 25", tipe: "centang", label: "Apakah dijalankan?" }
             ],
             "Ukis Abdul Mukhlis": [
-                { id: "u1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
-                { id: "u2", teks: "Membuat konten promosi/desain brosur harian", tipe: "centang", label: "Apakah tugas desain diselesaikan?" }
+                { id: "u1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "u2", teks: "Mencatat absensi pada aplikasi hadirr", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "u3", teks: "Berkomunikasi dengan vendor-vendor", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa vendor hari ini?" },
+                { id: "u4", teks: "Mencatat transaksi pettycash OB dan operasional yang terjadi hari ini", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah transaksi dicatat?" },
+                { id: "u5", teks: "Membuat dan mengajukan anggaran bulanan dapur sebelum tanggal 20", tipe: "centang", label: "Apakah dijalankan?" }
             ],
             "Mulyono": [
-                { id: "m1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
-                { id: "m2", teks: "Melakukan rekap administrasi berkas paspor jamaah", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa berkas paspor yang diproses?" }
+                { id: "m1", teks: "Melakukan telemarketing paket umrah dan haji ke 3 orang baru setiap hari", tipe: "skor", label: "Berapa orang yang ditelpon hari ini?" },
+                { id: "m2", teks: "Melakukan remarketing paket umrah dan haji ke 3 orang lama setiap hari", tipe: "skor", label: "Berapa orang yang dihubungi kembali hari ini?" },
+                { id: "m3", teks: "Menginput data jamaah yang ingin mendaftar umrah atau haji", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah data yang diinput?" },
+                { id: "m4", teks: "Melakukan followup daftar jamaah yang sudah mendaftar umrah atau haji agar melengkapi datanya dan berkasnya", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah jamaah yang followup?" }
             ],
             "Heri Setiawan": [
-                { id: "h1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
-                { id: "h2", teks: "Melakukan pengecekan dan maintenance sistem / inventaris", tipe: "centang", label: "Apakah pengecekan selesai?" }
+                { id: "h1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "h2", teks: "Melakukan pengecekan gudang", tipe: "centang", label: "Apakah pengecekan selesai?" },
+                { id: "h3", teks: "Mengepel lantai", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Merapihkan ruang reception", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Merapihkan ruang kerja utama", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Merapihkan ruang manajer pemasaran", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Merapihkan ruang meeting", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Merapihkan ruang direktur", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Membersihkan toilet", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Membersihkan kaca depan", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h3", teks: "Membersihkan debu semua ruangan", tipe: "centang", label: "Apakah dijalankan?" }
             ]
         };
 
@@ -192,6 +214,7 @@
                                       <select class="w-full px-3 py-2 border rounded-lg val-status" required>
                                           <option value="Ya/Dijalankan">Ya (Dijalankan)</option>
                                           <option value="Tidak Dijalankan">Tidak Dijalankan</option>
+                                          <option value="Tidak Diperlukan">Tidak Diperlukan</option>
                                       </select>`;
                     } else if (tugas.tipe === "centang_dan_jumlah") {
                         htmlTugas += `<label class="block text-xs text-slate-500 mb-1">${tugas.label}</label>
@@ -245,7 +268,8 @@
                         htmlTugas += `<label class="block text-xs text-slate-500 mb-1">Apakah meeting bulan ini diadakan/berjalan?</label>
                                       <select class="w-full px-3 py-2 border rounded-lg val-status mb-3 text-xs" required>
                                           <option value="Dilaksanakan">Ya, Dilaksanakan</option>
-                                          <option value="Tidak Ada Jadwal / Tidak Dilaksanakan">Tidak Ada Jadwal / Tidak Dilaksanakan</option>
+                                          <option value="Tidak Ada Jadwal">Tidak Ada Jadwal</option>
+                                          <option value="Tidak Dilaksanakan">Tidak Dilaksanakan</option>
                                       </select>
                                       <label class="block text-xs text-slate-500 mb-2">Pilih status kehadiran fisik Komisaris pada meeting hari ini:</label>
                                       <div class="space-y-3 border p-2 rounded bg-white">`;
