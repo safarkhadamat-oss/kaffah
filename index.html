@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Laporan KPI Harian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen p-4 flex justify-center items-center">
+
+    <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 class="font-['El_Messiri'] text-2xl font-bold text-center text-[#007b6f] mb-2">WIG & KPI Daily Report</h2>
+        <p class="text-base text-center text-slate-700 mb-2">400 Jamaah sebelum Tgl 31 Des 2026</p>
+        <p class="text-xs text-center text-slate-500 mb-6">Silakan pilih nama dan tanggal pelaksanaan lead action Anda.</p>
+
+        <form action="https://docs.google.com/forms/u/0/d/1hcY13P-ri8uNiC15PcW_12h5H1F92bdvTcbGQWH8-QA/formResponse" method="POST" id="kpiForm">
+            
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-slate-700 mb-2">PIN / KODE ID PEGAWAI</label>
+                <input type="password" id="inputPin" oninput="validasiLoginPin()" placeholder="Masukkan PIN Rahasia..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-center font-bold tracking-widest bg-slate-50" required>
+                <p id="pesanLogin" class="text-xs mt-2 font-semibold text-center hidden"></p>
+            </div>
+
+            <div class="mb-5">
+                <label class="block text-sm font-bold text-slate-700 mb-2">Tanggal Pelaksanaan Tugas</label>
+                <input type="date" id="inputTanggal" name="entry.2092074217" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 bg-slate-50" required>
+                <p class="text-[10px] text-amber-600 mt-1">*Maksimal input/perbaikan adalah 2 hari ke belakang.</p>
+            </div>
+
+            <div id="containerUtama" class="space-y-5 hidden">
+                
+                <div class="p-3 bg-indigo-50 rounded-xl text-center border border-indigo-100">
+                    <p class="text-xs text-slate-500">Selamat Datang,</p>
+                    <p id="namaUserTerdeteksi" class="text-lg font-bold text-[#007b6f]"></p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-bold text-[#007b6f] border-b pb-2">LEAD ACTION (CARA KAMU MEMBANTU PERUSAHAAN):</h3>
+                    <div id="listInputTugas" class="space-y-4"></div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-bold text-[#007b6f] border-b pb-2 mb-3">PENILAIAN KERJASAMA TIM (PEER REVIEW):</h3>
+                    <p class="text-[11px] text-slate-500 mb-3">Berikan penilaian objektif untuk rekan kerja / direksi hari ini:</p>
+                    <div id="listPenilaianTim" class="space-y-4"></div>
+                </div>
+
+                <button type="button" onclick="kirimSemuaLaporan()" class="w-full bg-[#007b6f] hover:bg-[#FA003F] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 mt-4">
+                    Kirim Semua Laporan
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        // ================= KAMUS PIN RAHASIA PEGAWAI (REVISI: FULAN DIHAPUS) =================
+        const databasePin = {
+            "1001": "Ridhwanullah",
+            "1002": "Wahyono",
+            "1003": "Fardhol Suparlan",
+            "1004": "Rizkiyah Husnul Khotimah",
+            "1005": "Miftahul Sakinah",
+            "1006": "Ukis Abdul Mukhlis",
+            "1007": "Mulyono",
+            "1008": "Heri Setiawan"
+        };
+
+        // DAFTAR MASTER NAMA PEGAWAI AKTIF
+        const semuaPegawai = [
+            "Ridhwanullah", 
+            "Wahyono", 
+            "Fardhol Suparlan", 
+            "Rizkiyah Husnul Khotimah", 
+            "Miftahul Sakinah", 
+            "Ukis Abdul Mukhlis", 
+            "Mulyono", 
+            "Heri Setiawan"
+        ];
+
+        // DAFTAR KOMISARIS YANG AKAN DINILAI KHUSUS
+        const paraKomisaris = ["Mukhlis Khalid", "Mansyur"];
+
+        // ================= MASTER TUGAS PEGAWAI =================
+        const masterTugas = {
+            "Ridhwanullah": [
+                { id: "r1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "r2", teks: "Follow up calon jamaah potensial via telepon", tipe: "skor", label: "Jumlah jamaah yang di-follow up?" }
+            ],
+            "Wahyono": [
+                { id: "w1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "w2", teks: "Mengadakan morning briefing pegawai", tipe: "centang", label: "Apakah dilaksanakan?" },
+                { id: "w3", teks: "Mencatat data kehadiran pegawai (Morning Briefing)", tipe: "absensi_briefing" },
+                { id: "w4", teks: "Mencatat status kehadiran kerja pegawai harian", tipe: "absensi_kehadiran" }
+            ],
+            "Fardhol Suparlan": [
+                { id: "f1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "f2", teks: "Menawarkan Paket Umrah dan Haji ke 3 orang tokoh setiap pekan", tipe: "skor", label: "Jumlah tokoh yang ditawarkan hari ini?" },
+                { id: "f3", teks: "Menawarkan paket umrah dan haji ke 50 database setiap pekan", tipe: "skor", label: "Jumlah database yang dihubungi hari ini?" }
+            ],
+            "Rizkiyah Husnul Khotimah": [
+                { id: "rk1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "rk2", teks: "Menginput data jamaah yang ingin mendaftar umrah atau haji", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah data yang diinput?" },
+                // TUGAS BARU: Mengadakan & mencatat absensi meeting rutin komisaris + direksi
+                { id: "rk3", teks: "Mengadakan meeting rutin komisaris bersama direksi dan mencatat kehadirannya", tipe: "absensi_meeting_komisaris" }
+            ],
+            "Miftahul Sakinah": [
+                { id: "s1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "s2", teks: "Mencatat transaksi yang terjadi hari ini", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa jumlah transaksi dicatat?" }
+            ],
+            "Ukis Abdul Mukhlis": [
+                { id: "u1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "u2", teks: "Membuat konten promosi/desain brosur harian", tipe: "centang", label: "Apakah tugas desain diselesaikan?" }
+            ],
+            "Mulyono": [
+                { id: "m1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "m2", teks: "Melakukan rekap administrasi berkas paspor jamaah", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berapa berkas paspor yang diproses?" }
+            ],
+            "Heri Setiawan": [
+                { id: "h1", teks: "Menawarkan paket umrah ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
+                { id: "h2", teks: "Melakukan pengecekan dan maintenance sistem / inventaris", tipe: "centang", label: "Apakah pengecekan selesai?" }
+            ]
+        };
+
+        const opsiPenilaian = ["Sangat Membantu", "Membantu", "Tidak Membantu", "Tidak Dibutuhkan", "Tidak Peduli", "Respon Lambat"];
+
+        // Set batas kalender H-2
+        const inputTanggal = document.getElementById('inputTanggal');
+        const hariIni = new Date();
+        inputTanggal.max = hariIni.toISOString().split('T')[0];
+        const duaHariLalu = new Date();
+        duaHariLalu.setDate(hariIni.getDate() - 2);
+        inputTanggal.min = duaHariLalu.toISOString().split('T')[0];
+        const kemarin = new Date();
+        kemarin.setDate(hariIni.getDate() - 1);
+        inputTanggal.value = kemarin.toISOString().split('T')[0];
+
+        let namaPegawaiLogin = "";
+
+        function validasiLoginPin() {
+            const pinInput = document.getElementById("inputPin").value;
+            const pesan = document.getElementById("pesanLogin");
+            const container = document.getElementById("containerUtama");
+            
+            if (databasePin[pinInput]) {
+                namaPegawaiLogin = databasePin[pinInput];
+                pesan.classList.remove("hidden", "text-red-600");
+                pesan.classList.add("text-green-600");
+                pesan.innerText = "✓ PIN Valid! Memuat data...";
+                document.getElementById("namaUserTerdeteksi").innerText = namaPegawaiLogin;
+                tampilkanSistemDinamis(namaPegawaiLogin);
+            } else {
+                namaPegawaiLogin = "";
+                container.classList.add("hidden");
+                if (pinInput.length >= 4) {
+                    pesan.classList.remove("hidden", "text-green-600");
+                    pesan.classList.add("text-red-600");
+                    pesan.innerText = "✗ PIN Salah atau Tidak Terdaftar!";
+                } else {
+                    pesan.classList.add("hidden");
+                }
+            }
+        }
+
+        function tampilkanSistemDinamis(nama) {
+            const container = document.getElementById("containerUtama");
+            const listInput = document.getElementById("listInputTugas");
+            const listTim = document.getElementById("listPenilaianTim");
+            
+            listInput.innerHTML = ""; 
+            listTim.innerHTML = "";
+            container.classList.remove("hidden");
+
+            // 1. GENERATE TUGAS UTAMA
+            const tugasPegawai = masterTugas[nama];
+            if (tugasPegawai) {
+                tugasPegawai.forEach((tugas, index) => {
+                    let htmlTugas = `<div class="p-4 bg-slate-50 rounded-xl border border-slate-200 block-tugas" data-tugas="${tugas.teks}" data-tipe="${tugas.tipe}">
+                        <p class="font-semibold text-sm text-slate-800 mb-2">${index + 1}. ${tugas.teks}</p>`;
+
+                    if (tugas.tipe === "skor") {
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-1">${tugas.label}</label>
+                                      <input type="number" class="w-full px-3 py-2 border rounded-lg val-status" placeholder="Masukkan angka..." required>`;
+                    } else if (tugas.tipe === "centang") {
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-1">${tugas.label}</label>
+                                      <select class="w-full px-3 py-2 border rounded-lg val-status" required>
+                                          <option value="Ya/Dijalankan">Ya (Dijalankan)</option>
+                                          <option value="Tidak Dijalankan">Tidak Dijalankan</option>
+                                      </select>`;
+                    } else if (tugas.tipe === "centang_dan_jumlah") {
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-1">${tugas.label}</label>
+                                      <select class="w-full px-3 py-2 border rounded-lg val-status mb-2" required>
+                                          <option value="Ya/Dijalankan">Ya (Dijalankan)</option>
+                                          <option value="Tidak Dijalankan">Tidak Dijalankan</option>
+                                      </select>
+                                      <label class="block text-xs text-slate-500 mb-1">${tugas.labelJumlah}</label>
+                                      <input type="number" class="w-full px-3 py-2 border rounded-lg val-jumlah" value="0">`;
+                    } else if (tugas.tipe === "absensi_briefing") {
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-2">Centang nama yang HADIR briefing:</label><div class="space-y-2 max-h-40 overflow-y-auto border p-2 rounded bg-white">`;
+                        semuaPegawai.forEach(p => {
+                            htmlTugas += `<label class="flex items-center space-x-2 text-sm text-slate-700">
+                                <input type="checkbox" value="${p}" class="cb-absensi rounded text-indigo-600 focus:ring-indigo-500">
+                                <span>${p}</span>
+                            </label>`;
+                        });
+                        htmlTugas += `</div><input type="hidden" class="val-status" value="Dilaksanakan">`;
+                    } else if (tugas.tipe === "absensi_kehadiran") {
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-2">Pilih status kehadiran kerja masing-masing pegawai:</label>
+                                      <div class="space-y-3 mt-2 max-h-60 overflow-y-auto border p-2 rounded bg-white">`;
+                        semuaPegawai.forEach(p => {
+                            htmlTugas += `<div class="flex items-center justify-between border-b pb-2 row-kehadiran-kerja" data-pegawai="${p}">
+                                <span class="text-xs font-medium text-slate-700 mr-2">${p}</span>
+                                <select class="text-[11px] border rounded-lg p-1 bg-white focus:ring-1 focus:ring-indigo-500 val-status-hadir" required>
+                                    <option value="Hadir Penuh">Hadir Penuh</option>
+                                    <option value="Hadir Tidak Penuh">Hadir Tidak Penuh</option>
+                                    <option value="Hadir Terlambat">Hadir Terlambat</option>
+                                    <option value="Izin">Izin</option>
+                                    <option value="Sakit">Sakit</option>
+                                </select>
+                            </div>`;
+                        });
+                        htmlTugas += `</div><input type="hidden" class="val-status" value="Dilaksanakan">`;
+                    } else if (tugas.tipe === "absensi_meeting_komisaris") {
+                        // KELOMPOK BARU: Kehadiran Meeting Komisaris Khusus Rizkiyah
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-1">Apakah meeting bulan ini diadakan/berjalan?</label>
+                                      <select class="w-full px-3 py-2 border rounded-lg val-status mb-3 text-xs" required>
+                                          <option value="Dilaksanakan">Ya, Dilaksanakan</option>
+                                          <option value="Tidak Ada Jadwal / Tidak Dilaksanakan">Tidak Ada Jadwal / Tidak Dilaksanakan</option>
+                                      </select>
+                                      <label class="block text-xs text-slate-500 mb-2">Pilih status kehadiran fisik Komisaris pada meeting hari ini:</label>
+                                      <div class="space-y-3 border p-2 rounded bg-white">`;
+                        paraKomisaris.forEach(k => {
+                            htmlTugas += `<div class="flex items-center justify-between border-b pb-2 row-kehadiran-komisaris" data-komisaris="${k}">
+                                <span class="text-xs font-bold text-slate-700">${k}</span>
+                                <select class="text-[11px] border rounded-lg p-1 bg-white val-status-komisaris" required>
+                                    <option value="Hadir">Hadir Meeting</option>
+                                    <option value="Tidak Hadir">Tidak Hadir (Absen)</option>
+                                </select>
+                            </div>`;
+                        });
+                        htmlTugas += `</div>`;
+                    }
+
+                    htmlTugas += `</div>`;
+                    listInput.insertAdjacentHTML('beforeend', htmlTugas);
+                });
+            }
+
+            // 2. GENERATE FORM PENILAIAN REKAN TIM AUTOMATIS
+            let htmlTimWrapper = `<div class="space-y-4 max-h-72 overflow-y-auto border p-2 rounded bg-slate-50/50">`;
+            
+            // A. Penilaian Standar Antar Pegawai
+            semuaPegawai.forEach(rekan => {
+                if (rekan !== nama) { 
+                    htmlTimWrapper += `<div class="p-3 bg-white rounded-xl border border-emerald-100 block-penilaian-tim" data-rekan="${rekan}">
+                        <label class="block text-xs font-medium text-slate-700 mb-1">Kinerja <span class="font-bold text-emerald-700">${rekan}</span> hari ini?</label>
+                        <select class="w-full px-3 py-2 border border-emerald-200 rounded-lg bg-white text-xs val-nilai-tim" required>
+                            <option value="">-- Pilih Penilaian --</option>`;
+                    opsiPenilaian.forEach(opsi => {
+                        htmlTimWrapper += `<option value="${opsi}">${opsi}</option>`;
+                    });
+                    htmlTimWrapper += `</select></div>`;
+                }
+            });
+
+            // B. HANYA JIKA YANG LOGIN ADALAH DIREKTUR ATAU SEKRETARIS (Ridhwanullah / Rizkiyah)
+            // Sistem akan menambahkan kotak penilaian eksklusif untuk Komisaris
+            if (nama === "Ridhwanullah" || nama === "Rizkiyah Husnul Khotimah") {
+                paraKomisaris.forEach(komisaris => {
+                    htmlTimWrapper += `<div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200 block-penilaian-komisaris" data-komisaris="${komisaris}">
+                        <label class="block text-xs font-bold text-indigo-900 mb-1">🔑 [Eksklusif Direksi] Keterlibatan Komisaris <span class="text-indigo-700">${komisaris}</span> bulan/hari ini?</label>
+                        <select class="w-full px-3 py-2 border border-indigo-300 rounded-lg bg-white text-xs val-nilai-komisaris" required>
+                            <option value="">-- Pilih Tingkat Keterlibatan --</option>`;
+                    opsiPenilaian.forEach(opsi => {
+                        htmlTimWrapper += `<option value="${opsi}">${opsi}</option>`;
+                    });
+                    htmlTimWrapper += `</select></div>`;
+                });
+            }
+
+            htmlTimWrapper += `</div>`;
+            listTim.insertAdjacentHTML('beforeend', htmlTimWrapper);
+        }
+
+        async function kirimSemuaLaporan() {
+            const tanggal = inputTanggal.value;
+            const formAction = document.getElementById("kpiForm").action;
+
+            if (!namaPegawaiLogin) {
+                alert("Sesi login tidak valid. Silakan masukkan PIN ulang!");
+                return;
+            }
+
+            if (!tanggal || tanggal < inputTanggal.min || tanggal > inputTanggal.max) {
+                alert("Tanggal tidak valid atau di luar batas izin!");
+                return;
+            }
+
+            let payloadKirim = [];
+
+            // A. Ambil Data Tugas Utama
+            const blocksTugas = document.querySelectorAll(".block-tugas");
+            for (let block of blocksTugas) {
+                const namaTugas = block.getAttribute("data-tugas");
+                const tipe = block.getAttribute("data-tipe");
+                let statusValue = block.querySelector(".val-status").value;
+                
+                let jumlahValue = "-";
+                if (tipe === "centang_dan_jumlah") {
+                    jumlahValue = block.querySelector(".val-jumlah").value;
+                } else if (tipe === "absensi_briefing") {
+                    let hadir = [];
+                    let tidakHadir = [];
+                    block.querySelectorAll(".cb-absensi").forEach(cb => {
+                        if(cb.checked) hadir.push(cb.value);
+                        else tidakHadir.push(cb.value);
+                    });
+                    jumlahValue = `Hadir Briefing: ${hadir.join(', ') || '-'} | Tidak Hadir: ${tidakHadir.join(', ') || '-'}`;
+                } else if (tipe === "absensi_kehadiran") {
+                    let rincianHadir = [];
+                    block.querySelectorAll(".row-kehadiran-kerja").forEach(row => {
+                        const namaP = row.getAttribute("data-pegawai");
+                        const statusP = row.querySelector(".val-status-hadir").value;
+                        rincianHadir.push(`${namaP}: ${statusP}`);
+                    });
+                    jumlahValue = rincianHadir.join(' | ');
+                } else if (tipe === "absensi_meeting_komisaris") {
+                    let rincianKomisaris = [];
+                    block.querySelectorAll(".row-kehadiran-komisaris").forEach(row => {
+                        const namaK = row.getAttribute("data-komisaris");
+                        const statusK = row.querySelector(".val-status-komisaris").value;
+                        rincianKomisaris.push(`${namaK}: ${statusK}`);
+                    });
+                    jumlahValue = rincianKomisaris.join(' | ');
+                }
+
+                payloadKirim.push({ namaTugas, statusValue, jumlahValue });
+            }
+
+            // B. Ambil Data Penilaian Tim Standar
+            const blocksTim = document.querySelectorAll(".block-penilaian-tim");
+            for (let block of blocksTim) {
+                const rekan = block.getAttribute("data-rekan");
+                const nilai = block.querySelector(".val-nilai-tim").value;
+
+                if (!nilai) {
+                    alert(`Harap berikan penilaian untuk ${rekan}!`);
+                    return;
+                }
+
+                payloadKirim.push({
+                    namaTugas: `Keterlibatan Tim (Menilai ${rekan})`,
+                    statusValue: nilai,
+                    jumlahValue: "-"
+                });
+            }
+
+            // C. Ambil Data Penilaian Komisaris (Jika Ada)
+            const blocksKomisaris = document.querySelectorAll(".block-penilaian-komisaris");
+            for (let block of blocksKomisaris) {
+                const komisaris = block.getAttribute("data-komisaris");
+                const nilaiK = block.querySelector(".val-nilai-komisaris").value;
+
+                if (!nilaiK) {
+                    alert(`Harap berikan penilaian keterlibatan untuk Komisaris ${komisaris}!`);
+                    return;
+                }
+
+                payloadKirim.push({
+                    namaTugas: `Keterlibatan Direksi-Komisaris (Menilai ${komisaris})`,
+                    statusValue: nilaiK,
+                    jumlahValue: "-"
+                });
+            }
+
+            // PROSES PENGIRIMAN DATA
+            for (let data of payloadKirim) {
+                const formData = new FormData();
+                formData.append("entry.1589922349", namaPegawaiLogin);       
+                formData.append("entry.1309869797", data.namaTugas);   
+                formData.append("entry.1142401102", data.statusValue); 
+                formData.append("entry.2092074217", data.jumlahValue); 
+                formData.append("entry.2092074217", tanggal); 
+
+                try {
+                    await fetch(formAction, { method: "POST", body: formData, mode: "no-cors" });
+                } catch (e) { console.log(e); }
+            }
+
+            alert("Luar biasa! Semua laporan harian & evaluasi meeting komisaris berhasil direkam.");
+            location.reload();
+        }
+    </script>
+</body>
+</html>
