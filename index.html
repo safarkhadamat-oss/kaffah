@@ -92,6 +92,7 @@
                 { id: "w2", teks: "Mengadakan morning briefing pegawai", tipe: "centang", label: "Apakah dilaksanakan?" },
                 { id: "w3", teks: "Mencatat data kehadiran pegawai (Morning Briefing)", tipe: "absensi_briefing" },
                 { id: "w4", teks: "Mencatat status kehadiran kerja pegawai harian", tipe: "absensi_kehadiran" }
+                { id: "w5", teks: "Mencatat ketertiban berpakaian pegawai", tipe: "absensi_berpakaian" }
             ],
             "Fardhol Suparlan": [
                 { id: "f1", teks: "Menawarkan paket umrah dan haji ke 3 orang", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
@@ -220,6 +221,20 @@
                             </div>`;
                         });
                         htmlTugas += `</div><input type="hidden" class="val-status" value="Dilaksanakan">`;
+                    } else if (tugas.tipe === "absensi_berpakaian") {
+                        htmlTugas += `<label class="block text-xs text-slate-500 mb-2">Pilih status ketertiban berpakaian kerja masing-masing pegawai:</label>
+                                      <div class="space-y-3 mt-2 max-h-60 overflow-y-auto border p-2 rounded bg-white">`;
+                        semuaPegawai.forEach(p => {
+                            htmlTugas += `<div class="flex items-center justify-between border-b pb-2 row-ketertiban-pakaian" data-pegawai="${p}">
+                                <span class="text-xs font-medium text-slate-700 mr-2">${p}</span>
+                                <select class="text-[11px] border rounded-lg p-1 bg-white focus:ring-1 focus:ring-indigo-500 val-status-pakaian" required>
+                                    <option value="Tertib">Tertib</option>
+                                    <option value="Tidak Tertib">Tidak Tertib</option>
+                                    <option value="Tidak Hadir">Tidak Hadir</option>
+                                </select>
+                            </div>`;
+                        });
+                        htmlTugas += `</div><input type="hidden" class="val-status" value="Dilaksanakan">`;
                     } else if (tugas.tipe === "absensi_meeting_komisaris") {
                         // KELOMPOK BARU: Kehadiran Meeting Komisaris Khusus Rizkiyah
                         htmlTugas += `<label class="block text-xs text-slate-500 mb-1">Apakah meeting bulan ini diadakan/berjalan?</label>
@@ -324,6 +339,14 @@
                         rincianHadir.push(`${namaP}: ${statusP}`);
                     });
                     jumlahValue = rincianHadir.join(' | ');
+                } else if (tipe === "absensi_berpakaian") {
+                    let rincianPakaian = [];
+                    block.querySelectorAll(".row-ketertiban-pakaian").forEach(row => {
+                        const namaP = row.getAttribute("data-pegawai");
+                        const statusP = row.querySelector(".val-status-pakaian").value;
+                        rincianPakaian.push(`${namaP}: ${statusP}`);
+                    });
+                    jumlahValue = rincianPakaian.join(' | ');
                 } else if (tipe === "absensi_meeting_komisaris") {
                     let rincianKomisaris = [];
                     block.querySelectorAll(".row-kehadiran-komisaris").forEach(row => {
