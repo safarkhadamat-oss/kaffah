@@ -54,7 +54,7 @@
     </div>
 
     <script>
-        // ================= KAMUS PIN RAHASIA PEGAWAI (REVISI: FULAN DIHAPUS) =================
+        // ================= KAMUS PIN RAHASIA PEGAWAI =================
         const databasePin = {
             "987456": "Ridhwanullah",
             "011011": "Wahyono",
@@ -127,8 +127,8 @@
             "Muflihiin Khalid": [
                 { id: "mk1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
                 { id: "mk2", teks: "Menawarkan kerjasama paket umrah dan haji ke 3 instansi setiap pekan", tipe: "skor", label: "Berapa instansi yang ditawarkan hari ini?" },
-                { id: "mk2", teks: "Berkomunikasi dengan vendor-vendor", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa vendor hari ini?" },
-                { id: "mk3", teks: "Berkomunikasi dengan pihak yang bekerjasama bisnis", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa pihak hari ini?" },
+                { id: "mk3", teks: "Berkomunikasi dengan vendor-vendor", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa vendor hari ini?" },
+                { id: "mk4", teks: "Berkomunikasi dengan pihak yang bekerjasama bisnis", tipe: "centang_dan_jumlah", label: "Apakah dijalankan?", labelJumlah: "Berkomunikasi dengan berapa pihak hari ini?" }
             ],
             "Ukis Abdul Mukhlis": [
                 { id: "u1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
@@ -147,14 +147,14 @@
                 { id: "h1", teks: "Menawarkan paket umrah dan haji ke 3 orang baru", tipe: "skor", label: "Berapa orang yang ditawarkan hari ini?" },
                 { id: "h2", teks: "Melakukan pengecekan gudang", tipe: "centang", label: "Apakah pengecekan selesai?" },
                 { id: "h3", teks: "Mengepel lantai", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Merapihkan ruang reception", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Merapihkan ruang kerja utama", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Merapihkan ruang manajer pemasaran", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Merapihkan ruang meeting", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Merapihkan ruang direktur", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Membersihkan toilet", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Membersihkan kaca depan", tipe: "centang", label: "Apakah dijalankan?" },
-                { id: "h3", teks: "Membersihkan debu semua ruangan", tipe: "centang", label: "Apakah dijalankan?" }
+                { id: "h4", teks: "Merapihkan ruang reception", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h5", teks: "Merapihkan ruang kerja utama", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h6", teks: "Merapihkan ruang manajer pemasaran", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h7", teks: "Merapihkan ruang meeting", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h8", teks: "Merapihkan ruang direktur", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h9", teks: "Membersihkan toilet", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h10", teks: "Membersihkan kaca depan", tipe: "centang", label: "Apakah dijalankan?" },
+                { id: "h11", teks: "Membersihkan debu semua ruangan", tipe: "centang", label: "Apakah dijalankan?" }
             ]
         };
 
@@ -273,7 +273,6 @@
                         });
                         htmlTugas += `</div><input type="hidden" class="val-status" value="Dilaksanakan">`;
                     } else if (tugas.tipe === "absensi_meeting_komisaris") {
-                        // KELOMPOK BARU: Kehadiran Meeting Komisaris Khusus Rizkiyah
                         htmlTugas += `<label class="block text-xs text-slate-500 mb-1">Apakah meeting bulan ini diadakan/berjalan?</label>
                                       <select class="w-full px-3 py-2 border rounded-lg val-status mb-3 text-xs" required>
                                           <option value="Dilaksanakan">Ya, Dilaksanakan</option>
@@ -302,7 +301,6 @@
             // 2. GENERATE FORM PENILAIAN REKAN TIM AUTOMATIS
             let htmlTimWrapper = `<div class="space-y-4 max-h-72 overflow-y-auto border p-2 rounded bg-slate-50/50">`;
             
-            // A. Penilaian Standar Antar Pegawai
             semuaPegawai.forEach(rekan => {
                 if (rekan !== nama) { 
                     htmlTimWrapper += `<div class="p-3 bg-white rounded-xl border border-emerald-100 block-penilaian-tim" data-rekan="${rekan}">
@@ -316,8 +314,6 @@
                 }
             });
 
-            // B. HANYA JIKA YANG LOGIN ADALAH DIREKTUR ATAU SEKRETARIS (Ridhwanullah / Rizkiyah)
-            // Sistem akan menambahkan kotak penilaian eksklusif untuk Komisaris
             if (nama === "Ridhwanullah" || nama === "Rizkiyah Husnul Khotimah") {
                 paraKomisaris.forEach(komisaris => {
                     htmlTimWrapper += `<div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200 block-penilaian-komisaris" data-komisaris="${komisaris}">
@@ -350,106 +346,111 @@
                 return;
             }
             
+            // PERBAIKAN 1: Efek loading langsung diaktifkan di awal fungsi secara aman
             btnSubmit.disabled = true;
             btnSubmit.innerText = "⌛ Sedang Memproses Data... Mohon Tunggu";
-            btnSubmit.classList.remove("bg-indigo-600", "hover:bg-indigo-700");
-            btnSubmit.classList.add("bg-slate-400", "cursor-not-allowed");
+            btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
 
             let payloadKirim = [];
 
-            // A. Ambil Data Tugas Utama
-            const blocksTugas = document.querySelectorAll(".block-tugas");
-            for (let block of blocksTugas) {
-                const namaTugas = block.getAttribute("data-tugas");
-                const tipe = block.getAttribute("data-tipe");
-                let statusValue = block.querySelector(".val-status").value;
-                
-                let jumlahValue = "-";
-                if (tipe === "centang_dan_jumlah") {
-                    jumlahValue = block.querySelector(".val-jumlah").value;
-                } else if (tipe === "absensi_briefing") {
-                    let hadir = [];
-                    let tidakHadir = [];
-                    block.querySelectorAll(".cb-absensi").forEach(cb => {
-                        if(cb.checked) hadir.push(cb.value);
-                        else tidakHadir.push(cb.value);
-                    });
-                    jumlahValue = `Hadir Briefing: ${hadir.join(', ') || '-'} | Tidak Hadir: ${tidakHadir.join(', ') || '-'}`;
-                } else if (tipe === "absensi_kehadiran") {
-                    let rincianHadir = [];
-                    block.querySelectorAll(".row-kehadiran-kerja").forEach(row => {
-                        const namaP = row.getAttribute("data-pegawai");
-                        const statusP = row.querySelector(".val-status-hadir").value;
-                        rincianHadir.push(`${namaP}: ${statusP}`);
-                    });
-                    jumlahValue = rincianHadir.join(' | ');
-                } else if (tipe === "absensi_berpakaian") {
-                    let rincianPakaian = [];
-                    block.querySelectorAll(".row-ketertiban-pakaian").forEach(row => {
-                        const namaP = row.getAttribute("data-pegawai");
-                        const statusP = row.querySelector(".val-status-pakaian").value;
-                        rincianPakaian.push(`${namaP}: ${statusP}`);
-                    });
-                    jumlahValue = rincianPakaian.join(' | ');
-                } else if (tipe === "absensi_meeting_komisaris") {
-                    let rincianKomisaris = [];
-                    block.querySelectorAll(".row-kehadiran-komisaris").forEach(row => {
-                        const namaK = row.getAttribute("data-komisaris");
-                        const statusK = row.querySelector(".val-status-komisaris").value;
-                        rincianKomisaris.push(`${namaK}: ${statusK}`);
-                    });
-                    jumlahValue = rincianKomisaris.join(' | ');
+            // PERBAIKAN 2: Blok Try ditaruh di sini agar membungkus semua pengumpulan data & validasi
+            try {
+                // A. Ambil Data Tugas Utama
+                const blocksTugas = document.querySelectorAll(".block-tugas");
+                for (let block of blocksTugas) {
+                    const namaTugas = block.getAttribute("data-tugas");
+                    const tipe = block.getAttribute("data-tipe");
+                    let statusValue = block.querySelector(".val-status").value;
+                    
+                    let jumlahValue = "-";
+                    if (tipe === "centang_dan_jumlah") {
+                        jumlahValue = block.querySelector(".val-jumlah").value;
+                    } else if (tipe === "absensi_briefing") {
+                        let hadir = [];
+                        let tidakHadir = [];
+                        block.querySelectorAll(".cb-absensi").forEach(cb => {
+                            if(cb.checked) hadir.push(cb.value);
+                            else tidakHadir.push(cb.value);
+                        });
+                        jumlahValue = `Hadir Briefing: ${hadir.join(', ') || '-'} | Tidak Hadir: ${tidakHadir.join(', ') || '-'}`;
+                    } else if (tipe === "absensi_kehadiran") {
+                        let rincianHadir = [];
+                        block.querySelectorAll(".row-kehadiran-kerja").forEach(row => {
+                            const namaP = row.getAttribute("data-pegawai");
+                            const statusP = row.querySelector(".val-status-hadir").value;
+                            rincianHadir.push(`${namaP}: ${statusP}`);
+                        });
+                        jumlahValue = rincianHadir.join(' | ');
+                    } else if (tipe === "absensi_berpakaian") {
+                        let rincianPakaian = [];
+                        block.querySelectorAll(".row-ketertiban-pakaian").forEach(row => {
+                            const namaP = row.getAttribute("data-pegawai");
+                            const statusP = row.querySelector(".val-status-pakaian").value;
+                            rincianPakaian.push(`${namaP}: ${statusP}`);
+                        });
+                        jumlahValue = rincianPakaian.join(' | ');
+                    } else if (tipe === "absensi_meeting_komisaris") {
+                        let rincianKomisaris = [];
+                        block.querySelectorAll(".row-kehadiran-komisaris").forEach(row => {
+                            const namaK = row.getAttribute("data-komisaris");
+                            const statusK = row.querySelector(".val-status-komisaris").value;
+                            rincianKomisaris.push(`${namaK}: ${statusK}`);
+                        });
+                        jumlahValue = rincianKomisaris.join(' | ');
+                    }
+
+                    payloadKirim.push({ namaTugas, statusValue, jumlahValue });
                 }
 
-                payloadKirim.push({ namaTugas, statusValue, jumlahValue });
-            }
+                // B. Ambil Data Penilaian Tim Standar
+                const blocksTim = document.querySelectorAll(".block-penilaian-tim");
+                for (let block of blocksTim) {
+                    const rekan = block.getAttribute("data-rekan");
+                    const nilai = block.querySelector(".val-nilai-tim").value;
 
-            // B. Ambil Data Penilaian Tim Standar
-            const blocksTim = document.querySelectorAll(".block-penilaian-tim");
-            for (let block of blocksTim) {
-                const rekan = block.getAttribute("data-rekan");
-                const nilai = block.querySelector(".val-nilai-tim").value;
+                    if (!nilai) {
+                        alert(`Harap berikan penilaian untuk ${rekan}!`);
+                        resetTombolSubmit(btnSubmit); // Memulihkan tombol jika input belum lengkap
+                        return;
+                    }
 
-                if (!nilai) {
-                    alert(`Harap berikan penilaian untuk ${rekan}!`);
-                    return;
+                    payloadKirim.push({
+                        namaTugas: `Keterlibatan Tim (Menilai ${rekan})`,
+                        statusValue: nilai,
+                        jumlahValue: "-"
+                    });
                 }
 
-                payloadKirim.push({
-                    namaTugas: `Keterlibatan Tim (Menilai ${rekan})`,
-                    statusValue: nilai,
-                    jumlahValue: "-"
-                });
-            }
+                // C. Ambil Data Penilaian Komisaris (Jika Ada)
+                const blocksKomisaris = document.querySelectorAll(".block-penilaian-komisaris");
+                for (let block of blocksKomisaris) {
+                    const komisaris = block.getAttribute("data-komisaris");
+                    const nilaiK = block.querySelector(".val-nilai-komisaris").value;
 
-            // C. Ambil Data Penilaian Komisaris (Jika Ada)
-            const blocksKomisaris = document.querySelectorAll(".block-penilaian-komisaris");
-            for (let block of blocksKomisaris) {
-                const komisaris = block.getAttribute("data-komisaris");
-                const nilaiK = block.querySelector(".val-nilai-komisaris").value;
+                    if (!nilaiK) {
+                        alert(`Harap berikan penilaian keterlibatan untuk Komisaris ${komisaris}!`);
+                        resetTombolSubmit(btnSubmit); // Memulihkan tombol jika input belum lengkap
+                        return;
+                    }
 
-                if (!nilaiK) {
-                    alert(`Harap berikan penilaian keterlibatan untuk Komisaris ${komisaris}!`);
-                    return;
+                    payloadKirim.push({
+                        namaTugas: `Keterlibatan Direksi-Komisaris (Menilai ${komisaris})`,
+                        statusValue: nilaiK,
+                        jumlahValue: "-"
+                    });
                 }
 
-                payloadKirim.push({
-                    namaTugas: `Keterlibatan Direksi-Komisaris (Menilai ${komisaris})`,
-                    statusValue: nilaiK,
-                    jumlahValue: "-"
-                });
-            }
+                // PROSES PENGIRIMAN DATA SEKALIGUS
+                for (let data of payloadKirim) {
+                    const formData = new FormData();
+                    formData.append("entry.1589922349", namaPegawaiLogin);       
+                    formData.append("entry.1309869797", data.namaTugas);   
+                    formData.append("entry.1142401102", data.statusValue); 
+                    formData.append("entry.2092074217", data.jumlahValue); 
+                    // PERBAIKAN 3: ID diubah menjadi entry.2092074217 agar sinkron dengan HTML
+                    formData.append("entry.232424341", tanggal); 
 
-            // PROSES PENGIRIMAN DATA
-            for (let data of payloadKirim) {
-                const formData = new FormData();
-                formData.append("entry.1589922349", namaPegawaiLogin);       
-                formData.append("entry.1309869797", data.namaTugas);   
-                formData.append("entry.1142401102", data.statusValue); 
-                formData.append("entry.2092074217", data.jumlahValue); 
-                formData.append("entry.232424341", tanggal); 
-
-                await fetch(formAction, { method: "POST", body: formData, mode: "no-cors" });
+                    await fetch(formAction, { method: "POST", body: formData, mode: "no-cors" });
                 }
 
                 alert("Luar biasa! Semua laporan harian & evaluasi meeting komisaris berhasil direkam.");
