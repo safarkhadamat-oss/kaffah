@@ -447,16 +447,15 @@
                 formData.append("entry.1309869797", data.namaTugas);   
                 formData.append("entry.1142401102", data.statusValue); 
                 formData.append("entry.2092074217", data.jumlahValue); 
-                formData.append("entry.2092074217", tanggal); 
+                formData.append("entry.232424341", tanggal); 
 
-                try {
-                    await fetch(formAction, { method: "POST", body: formData, mode: "no-cors" });
-                } catch (e) { console.log(e); }
-            }
+                await fetch(formAction, { method: "POST", body: formData, mode: "no-cors" });
+                }
 
-            alert("Luar biasa! Semua laporan harian & evaluasi meeting komisaris berhasil direkam.");
-            location.reload();
-        } catch (error) {
+                alert("Luar biasa! Semua laporan harian & evaluasi meeting komisaris berhasil direkam.");
+                location.reload();
+
+            } catch (error) {
                 console.log(error);
                 alert("Terjadi gangguan jaringan, gagal mengirim sebagian data. Silakan coba klik kirim kembali.");
                 resetTombolSubmit(btnSubmit);
@@ -467,8 +466,7 @@
         function resetTombolSubmit(btn) {
             btn.disabled = false;
             btn.innerText = "Kirim Semua Laporan";
-            btn.classList.remove("bg-slate-400", "cursor-not-allowed");
-            btn.classList.add("bg-indigo-600", "hover:bg-indigo-700");
+            btn.classList.remove("opacity-50", "cursor-not-allowed");
         }
     </script>
 </body>
