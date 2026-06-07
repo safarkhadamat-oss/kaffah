@@ -45,7 +45,7 @@
                     <div id="listPenilaianTim" class="space-y-4"></div>
                 </div>
 
-                <button type="button" onclick="kirimSemuaLaporan()" class="w-full bg-[#007b6f] hover:bg-[#FA003F] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 mt-4">
+                <button type="button" id="btnSubmit" onclick="kirimSemuaLaporan()" class="w-full bg-[#007b6f] hover:bg-[#FA003F] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 mt-4">
                     Kirim Semua Laporan
                 </button>
             </div>
@@ -338,6 +338,7 @@
         async function kirimSemuaLaporan() {
             const tanggal = inputTanggal.value;
             const formAction = document.getElementById("kpiForm").action;
+            const btnSubmit = document.getElementById("btnSubmit");
 
             if (!namaPegawaiLogin) {
                 alert("Sesi login tidak valid. Silakan masukkan PIN ulang!");
@@ -348,6 +349,11 @@
                 alert("Tanggal tidak valid atau di luar batas izin!");
                 return;
             }
+            
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "⌛ Sedang Memproses Data... Mohon Tunggu";
+            btnSubmit.classList.remove("bg-indigo-600", "hover:bg-indigo-700");
+            btnSubmit.classList.add("bg-slate-400", "cursor-not-allowed");
 
             let payloadKirim = [];
 
@@ -450,6 +456,19 @@
 
             alert("Luar biasa! Semua laporan harian & evaluasi meeting komisaris berhasil direkam.");
             location.reload();
+        } catch (error) {
+                console.log(error);
+                alert("Terjadi gangguan jaringan, gagal mengirim sebagian data. Silakan coba klik kirim kembali.");
+                resetTombolSubmit(btnSubmit);
+            }
+        }
+
+        // FUNGSI PEMBANTU: Mengembalikan tampilan tombol ke semula jika ada pembatalan/error
+        function resetTombolSubmit(btn) {
+            btn.disabled = false;
+            btn.innerText = "Kirim Semua Laporan";
+            btn.classList.remove("bg-slate-400", "cursor-not-allowed");
+            btn.classList.add("bg-indigo-600", "hover:bg-indigo-700");
         }
     </script>
 </body>
