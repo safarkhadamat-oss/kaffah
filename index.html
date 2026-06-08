@@ -165,7 +165,7 @@
         const hariIni = new Date();
         inputTanggal.max = hariIni.toISOString().split('T')[0];
         const duaHariLalu = new Date();
-        duaHariLalu.setDate(hariIni.getDate() - 2);
+        duaHariLalu.setDate(hariIni.getDate() - 3);
         inputTanggal.min = duaHariLalu.toISOString().split('T')[0];
         const kemarin = new Date();
         kemarin.setDate(hariIni.getDate() - 1);
